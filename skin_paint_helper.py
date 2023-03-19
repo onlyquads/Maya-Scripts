@@ -9,6 +9,8 @@ skin_paint_version = 1.0
 SKIN_PAINT_PRESET_VALUES = dict(
 
 	default_step_value = 1,
+
+	###You can edit, remove, add values of buttons here.
 	skin_paint_values=[
 		(0),
 		(0.25),
