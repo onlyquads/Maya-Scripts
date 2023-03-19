@@ -234,8 +234,8 @@ reset_pan_zoom_button = cmds.button(label='Reset',annotation = "Reset Pan and Zo
 cmds.setParent('..')
 cmds.setParent('..')
 
-pan_zoom_toolsUI = cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[(1, 180)], enable = False)
 ###ZOOM BUTTONS
+pan_zoom_toolsUI = cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[(1, 180)], enable = False)
 cmds.separator(h=10)
 cmds.rowColumnLayout( numberOfColumns=3, columnWidth=[(1, 90), (2, 90)])
 cmds.button(label="Zoom In", height = 30,annotation ="Use SHIFT + CLICK to divide the step value by 2.", command = partial (zoom,'Zoom In'))
