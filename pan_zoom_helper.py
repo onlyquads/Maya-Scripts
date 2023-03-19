@@ -241,7 +241,7 @@ cmds.rowColumnLayout( numberOfColumns=3, columnWidth=[(1, 90), (2, 90)])
 cmds.button(label="Zoom In", height = 30,annotation ="Use SHIFT + CLICK to divide the step value by 2.", command = partial (zoom,'Zoom In'))
 cmds.button(label="Zoom Out", height = 30,annotation ="Use SHIFT + CLICK to divide the step value by 2.", command = partial (zoom,'Zoom Out'))
 cmds.setParent('..')
-cmds.button(label ="Reset Zoom" annotation = "Reset only zoom", command = reset_zoom)
+cmds.button(label ="Reset Zoom", annotation = "Reset only zoom", command = reset_zoom)
 
 ###MOVE BUTTONS
 move_buttons()
