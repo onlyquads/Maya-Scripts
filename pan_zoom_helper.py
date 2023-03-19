@@ -1,53 +1,60 @@
-###PanZoomTool
+###PanZoomHelper
+###This script allows user to easily use maya's pan/zoom options.
+###You need to set the camera you want to work on
+###You can set production camera into the preferences so the script will automattically set it.
 
 import maya.cmds as cmds
 from functools import partial
 
 
 preferences = dict (
+
+	###Set production camera here
 	shotcam = 'cameraShape1',
 
 	move_step_value = 0.1,
 
 	zoom_step_value = 0.1,
-
-	zoom_values = [
-	(0.0),
-	(0.1),
-	(0.2),
-	(0.3),
-	]
-)
+	)
 
 def get_production_camera (*args):
 
 	shotcam = preferences.get('shotcam')
-	if shotcam == '':
-		shotcam = 'Camera Is Not Set!'
-		return 
 	if cmds.objExists(shotcam):
 		cmds.textField(selected_shotcam_field, e=True, text = shotcam)
 		cmds.rowColumnLayout(pan_zoom_main_toolsUI, e=True, enable = True)
-		return 
+	else:
+		shotcam = 'Camera Is Not Set!'
+		cmds.textField(selected_shotcam_field, e=True, text = shotcam)
+		cmds.warning("No produciton camera found in scene.")
 
 
 def set_shotcam (*args):
 	
 	selected_cam = cmds.ls(selection = True)
-	selected_cam_shape = cmds.listRelatives(selected_cam, s=True)
-	
 	
 	if len(selected_cam) == 0:
-		cmds.warning ("Please select a camera.")
-		return
-	if len(selected_cam) <=2 :
-		cmds.warning("Please select only one camera.")
-	if cmds.objectType(selected_cam_shape[0]) == 'camera':
-		print selected_cam
-		shotcam = selected_cam_shape[0]
-		cmds.textField(selected_shotcam_field, e=True, text= str(selected_cam_shape[0]))
+		return cmds.warning ("Please select a camera.")
+		
+	if len(selected_cam) >=2 :
+		return cmds.warning("Please select only one camera.")
+
+	if cmds.objectType(selected_cam[0]) == 'transform':
+		selected_cam_shape = cmds.listRelatives(selected_cam, s=True)
+		if cmds.objectType(selected_cam_shape[0]) == 'camera':
+			shotcam = selected_cam_shape[0]
+			cmds.textField(selected_shotcam_field, e=True, text= str(selected_cam_shape[0]))
+			cmds.rowColumnLayout(pan_zoom_main_toolsUI, e=True, enable = True)
+			return shotcam
+		return cmds.warning("The selected object is not a camera")
+	if cmds.objectType(selected_cam) == 'camera':
+		shotcam = selected_cam[0]
+		cmds.textField(selected_shotcam_field, e=True, text= str(selected_cam[0]))
 		cmds.rowColumnLayout(pan_zoom_main_toolsUI, e=True, enable = True)
 		return shotcam
+	
+	return cmds.warning("The selected object is not a camera")
+
 
 def mod_key_pressed (label, *args):
 	move_step_value = cmds.floatField (user_move_step_value, q=True, value = True)
@@ -107,9 +114,13 @@ def zoom (direction, *args):
 		mod = cmds.getModifiers()
 		if mod == 1:
 			new_value = current_value - (zoom_step_value/2)
+			if new_value <= 0:
+				return  cmds.warning("The value you try to set is below zero")
 			cmds.setAttr(shotcam+'.zoom', new_value)
 			return
 		new_value = current_value - zoom_step_value
+		if new_value <= 0:
+			return  cmds.warning("The value you try to set is below zero")
 		cmds.setAttr(shotcam+'.zoom', new_value)
 		return
 	if direction == 'Zoom Out' :
@@ -183,13 +194,13 @@ def move (direction, *args):
 def move_buttons():
 	cmds.rowColumnLayout(numberOfColumns = 1, columnWidth = [(1,180)])
 	cmds.separator(h=10)
-	cmds.button(label='Up', annotation ="Use SHIFT + CLICK to divide the step value by 2", command = partial(move, 'Up'), height =30)
+	cmds.button(label='Up', annotation ="Use SHIFT + CLICK to divide the step value by 2.", command = partial(move, 'Up'), height =30)
 	cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1,90),(2,90)])
-	cmds.button(label='Left', annotation ="Use SHIFT + CLICK to divide the step value by 2", command = partial(move, 'Left'), height =30)
-	cmds.button(label='Right',annotation ="Use SHIFT + CLICK to divide the step value by 2", command = partial(move, 'Right'), height =30)
+	cmds.button(label='Left', annotation ="Use SHIFT + CLICK to divide the step value by 2.", command = partial(move, 'Left'), height =30)
+	cmds.button(label='Right',annotation ="Use SHIFT + CLICK to divide the step value by 2.", command = partial(move, 'Right'), height =30)
 	cmds.setParent('..')
-	cmds.button(label='Down',annotation ="Use SHIFT + CLICK to divide the step value by 2", command = partial(move, 'Down'), height =30)
-	cmds.button(label='Reset Move',annotation ="Use SHIFT + CLICK to divide the step value by 2", command = partial(move, 'Reset'))
+	cmds.button(label='Down',annotation ="Use SHIFT + CLICK to divide the step value by 2.", command = partial(move, 'Down'), height =30)
+	cmds.button(label='Reset Move',annotation ="Reset only move.", command = partial(move, 'Reset'))
 	cmds.separator(h=10)
 	cmds.setParent('..')
 
@@ -227,10 +238,10 @@ pan_zoom_toolsUI = cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[(1, 180)
 ###ZOOM BUTTONS
 cmds.separator(h=10)
 cmds.rowColumnLayout( numberOfColumns=3, columnWidth=[(1, 90), (2, 90)])
-cmds.button(label="Zoom In", height = 30,annotation ="Use SHIFT + CLICK to divide the step value by 2", command = partial (zoom,'Zoom In'))
-cmds.button(label="Zoom Out", height = 30,annotation ="Use SHIFT + CLICK to divide the step value by 2", command = partial (zoom,'Zoom Out'))
+cmds.button(label="Zoom In", height = 30,annotation ="Use SHIFT + CLICK to divide the step value by 2.", command = partial (zoom,'Zoom In'))
+cmds.button(label="Zoom Out", height = 30,annotation ="Use SHIFT + CLICK to divide the step value by 2.", command = partial (zoom,'Zoom Out'))
 cmds.setParent('..')
-cmds.button(label ="Reset Zoom", command = reset_zoom)
+cmds.button(label ="Reset Zoom" annotation = "Reset only zoom", command = reset_zoom)
 
 ###MOVE BUTTONS
 move_buttons()
@@ -245,8 +256,6 @@ user_zoom_step_value = cmds.floatField(value = default_zoom_step_value, annotati
 cmds.text('Move Step Value')
 user_move_step_value = cmds.floatField(value = default_move_step_value, annotation = "Set a step value to increment the move value with.")
 cmds.setParent('..')
-
-
 
 
 
