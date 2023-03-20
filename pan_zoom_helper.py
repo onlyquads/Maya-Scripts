@@ -47,7 +47,7 @@ def set_shotcam (*args):
 			cmds.rowColumnLayout(pan_zoom_main_toolsUI, e=True, enable = True)
 			return shotcam
 		return cmds.warning("The selected object is not a camera")
-	if cmds.objectType(selected_cam) == 'camera':
+	if cmds.objectType(selected_cam) == 'camera' or cmds.objectType(selected_cam) == 'stereoRigCamera':
 		shotcam = selected_cam[0]
 		cmds.textField(selected_shotcam_field, e=True, text= str(selected_cam[0]))
 		cmds.rowColumnLayout(pan_zoom_main_toolsUI, e=True, enable = True)
