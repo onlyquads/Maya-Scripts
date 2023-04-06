@@ -1,7 +1,8 @@
-###Reset_selected controllers
+###Reset selected controllers transform value
+###Only applies to Translate, Rotate, and Scale attributes!
+###Select one or more rig controllers and run the script
 
 import maya.cmds as cmds
-
 
 def get_transform_attributes():
     axes  = ('X','Y','Z')
