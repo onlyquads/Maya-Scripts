@@ -153,29 +153,21 @@ cmds.text('Skin Paint Helper')
 cmds.separator(h=10)
 
 
-'''
-cmds.rowColumnLayout( numberOfColumns = 2)
-cmds.text('Current Value :')
-current_paint_value_text = cmds.text(get_current_paint_value())
-cmds.setParent('..')
-'''
-
-
 #PAINT VALUE BUTTONS
 
-cmds.rowColumnLayout( numberOfColumns=2, columnWidth=[(1,90),(2,90)])
+cmds.rowColumnLayout( adjustableColumn=True,numberOfColumns=2, columnWidth=[(1,90),(2,90)])
 cmds.button(label='Replace', annotation ='Set Operation to Replace', command=set_operation_replace)
 cmds.button(label='Smooth', annotation ='Set Operation to Smooth', command=set_operation_smooth)
 cmds.setParent('..')
 
-cmds.rowColumnLayout( numberOfColumns=5, columnWidth=[(1, 36), (2, 36), (3, 36),(4,36),(5,36) ] )
+cmds.rowColumnLayout(adjustableColumn=True, numberOfColumns=5, columnWidth=[(1, 36), (2, 36), (3, 36),(4,36),(5,36) ] )
 
 populate_skin_paint_buttons()
 
 cmds.setParent('..')
 
 
-cmds.rowColumnLayout( numberOfColumns=3, columnWidth=[(1, 60), (2, 60), (3, 60)] )
+cmds.rowColumnLayout(adjustableColumn=True, numberOfColumns=3, columnWidth=[(1, 60), (2, 60), (3, 60)] )
 cmds.button(label='+',annotation='Increase paint Value', command= increase_paint_value,width=60 )
 default_step_value = SKIN_PAINT_PRESET_VALUES.get('default_step_value')
 user_specified_step = cmds.floatField(editable = True, width=60, v=default_step_value ,annotation = 'Set Step Value')
