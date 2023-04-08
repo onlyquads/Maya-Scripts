@@ -192,10 +192,10 @@ def move (direction, *args):
 
 
 def move_buttons():
-	cmds.rowColumnLayout(numberOfColumns = 1, columnWidth = [(1,180)])
+	cmds.rowColumnLayout(adjustableColumn=True,numberOfColumns = 1, columnWidth = [(1,180)])
 	cmds.separator(h=10)
 	cmds.button(label='Up', annotation ="Use SHIFT + CLICK to divide the step value by 2.", command = partial(move, 'Up'), height =30)
-	cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1,90),(2,90)])
+	cmds.rowColumnLayout(adjustableColumn=True,numberOfColumns=2, columnWidth=[(1,90),(2,90)])
 	cmds.button(label='Left', annotation ="Use SHIFT + CLICK to divide the step value by 2.", command = partial(move, 'Left'), height =30)
 	cmds.button(label='Right',annotation ="Use SHIFT + CLICK to divide the step value by 2.", command = partial(move, 'Right'), height =30)
 	cmds.setParent('..')
@@ -218,7 +218,7 @@ cmds.text('PAN ZOOM HELPER')
 cmds.separator(h=10)
 cmds.setParent('..')
 
-cmds.rowColumnLayout( numberOfColumns=2, columnWidth=[(1, 40), (2, 140)])
+cmds.rowColumnLayout( adjustableColumn=True,numberOfColumns=2, columnWidth=[(1, 40), (2, 140)])
 set_selected_cam_as_shotcam = cmds.button(label='Set', annotation = "Select a camera and click on Set", command = set_shotcam)
 selected_shotcam_field = cmds.textField(isObscured = True, editable = False, text = '')
 
@@ -226,8 +226,8 @@ cmds.setParent('..')
 
 ###RESET OR ENABLE BUTTONS
 cmds.separator(h=10)
-pan_zoom_main_toolsUI = cmds.rowColumnLayout(numberOfColumns=1, enable = False)
-cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1, 90), (2, 90)])
+pan_zoom_main_toolsUI = cmds.rowColumnLayout(adjustableColumn=True,numberOfColumns=1, enable = False)
+cmds.rowColumnLayout(adjustableColumn=True,numberOfColumns=2, columnWidth=[(1, 90), (2, 90)])
 
 pan_zoom_tool_state_checkbox = cmds.checkBox( label='Pan Zoom', annotation ="Enable/Disable Pan Zoom.", align='center',value = False, onCommand = set_pan_zoom_enable, offCommand = set_pan_zoom_disable )
 reset_pan_zoom_button = cmds.button(label='Reset',annotation = "Reset Pan and Zoom.", command = reset_pan_zoom_to_default)
@@ -235,9 +235,9 @@ cmds.setParent('..')
 cmds.setParent('..')
 
 ###ZOOM BUTTONS
-pan_zoom_toolsUI = cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[(1, 180)], enable = False)
+pan_zoom_toolsUI = cmds.rowColumnLayout(adjustableColumn=True,numberOfColumns=1, columnWidth=[(1, 180)], enable = False)
 cmds.separator(h=10)
-cmds.rowColumnLayout( numberOfColumns=3, columnWidth=[(1, 90), (2, 90)])
+cmds.rowColumnLayout( adjustableColumn=True,numberOfColumns=3, columnWidth=[(1, 90), (2, 90)])
 cmds.button(label="Zoom In", height = 30,annotation ="Use SHIFT + CLICK to divide the step value by 2.", command = partial (zoom,'Zoom In'))
 cmds.button(label="Zoom Out", height = 30,annotation ="Use SHIFT + CLICK to divide the step value by 2.", command = partial (zoom,'Zoom Out'))
 cmds.setParent('..')
@@ -247,7 +247,7 @@ cmds.button(label ="Reset Zoom", annotation = "Reset only zoom", command = reset
 move_buttons()
 
 
-cmds.rowColumnLayout(numberOfColumns = 2, columnWidth=[(1, 90), (2, 90)])
+cmds.rowColumnLayout(adjustableColumn=True,numberOfColumns = 2, columnWidth=[(1, 90), (2, 90)])
 
 default_zoom_step_value = preferences.get('zoom_step_value')
 default_move_step_value = preferences.get('move_step_value')
