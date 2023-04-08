@@ -200,7 +200,7 @@ cmds.text("Paint Brush Radius")
 cmds.separator(h=10)
 
 #PAINT BRUSH BUTTONS
-cmds.rowColumnLayout( numberOfColumns=3, columnWidth=[(1, 60), (2, 60), (3, 60)] )
+cmds.rowColumnLayout(adjustableColumn=True, numberOfColumns=3, columnWidth=[(1, 60), (2, 60), (3, 60)] )
 cmds.button(label='+',annotation='Increase Brush Radius', command= increase_brush_radius,width=60 )
 step_default_value = PRESET_VALUES.get('brush_step_default_value')
 user_specified_step = cmds.floatField(editable = True, width=60, v=step_default_value,annotation = "Set Step Value")
@@ -209,20 +209,20 @@ populate_brush_radius_buttons()
 cmds.setParent('..')
 
 #REPLACE SMOOTH AND FLOOD BUTTONS
-cmds.rowColumnLayout( numberOfColumns=2, columnWidth=[(1, 90), (2, 90)] )
+cmds.rowColumnLayout(adjustableColumn=True, numberOfColumns=2, columnWidth=[(1, 90), (2, 90)] )
 cmds.button(label='Replace', command = set_operation_replace)
 cmds.button(label='Smooth', command= set_operation_smooth)
 cmds.setParent('..')
 cmds.button(label='Flood', command= flood_user_value, annotation = 'Flood Smooth or Replace with value 1.  Use SHIFT+CLICK to Flood replace with value 0')
 
 #SOFT SELECTION RADIUS TITLE
-cmds.rowColumnLayout( numberOfColumns=1, w=window_width )
+cmds.rowColumnLayout(adjustableColumn=True, numberOfColumns=1, w=window_width )
 cmds.separator(h=10)
 cmds.text("Soft Selection Radius")
 cmds.separator(h=10)
 
 #SOFT SELECTION RADIUS BUTTONS
-cmds.rowColumnLayout( numberOfColumns=3, columnWidth=[(1, 60), (2, 60), (3, 60)] )
+cmds.rowColumnLayout(adjustableColumn=True, numberOfColumns=3, columnWidth=[(1, 60), (2, 60), (3, 60)] )
 
 cmds.button(label='+',annotation='Increase Soft Selection Radius', command= increase_softsel_radius,width=60 )
 step_default_value = PRESET_VALUES.get('softsel_step_default_value')
