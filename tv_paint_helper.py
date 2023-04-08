@@ -1,4 +1,4 @@
-###This script is a workaround for maya  artists working with Team Viewer. 
+###This script is a workaround for maya artists working with Team Viewer. 
 ###As Team Viewer doesn’t send key pressed infos other than modifiers keys, 
 ###users cannot use some maya paint shortcuts. 
 ###Using this script users can increase/decrease paint brush values or soft selection radius value. 
