@@ -1,10 +1,11 @@
-###Reset selected controllers transform value
-###Only applies to Translate, Rotate, and Scale attributes!
+###This script will reset transform value of the selected controllers
+###Only applies to Translate, Rotate, and Scale attributes!!!
 ###Select one or more rig controllers and run the script
 
 import maya.cmds as cmds
 
 def get_transform_attributes():
+
     axes  = ('X','Y','Z')
     transform_attributes = ('translate','rotate','scale')
     transfrom_attr_list=[]
@@ -33,6 +34,7 @@ def set_attr(object_name):
     print ('object named ' + object_name + ' has been reset')
 
 def reset_selected ():
+
     selected_objects = cmds.ls (selection = True)
     if not selected_objects:
         return cmds.warning('No object selected. Please select objects before running the script')
