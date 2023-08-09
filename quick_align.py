@@ -4,13 +4,13 @@ def get_position(target_name):
     pos_x = cmds.getAttr(target_name+'.translateX')
     pos_y = cmds.getAttr(target_name+'.translateY')
     pos_z = cmds.getAttr(target_name+'.translateZ')
-    
+
     rot_x = cmds.getAttr(target_name+'.rotateX')
     rot_y = cmds.getAttr(target_name+'.rotateY')
     rot_z = cmds.getAttr(target_name+'.rotateZ')
     print('target position stored')
     return pos_x, pos_y, pos_z, rot_x, rot_y, rot_z
-    
+
 selection = cmds.ls(selection=True)
 
 print selection
