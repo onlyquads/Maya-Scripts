@@ -2,11 +2,12 @@
 #
 # This script allows user to easily use maya's pan/zoom options.
 # You need to set the camera you want to work on
-# You can set production camera into the preferences so the script will automattically set it.
+# You can set production camera into the preferences class
+# so the script will automatically set it.
 #
 # INSTALLATION INSTRUCTIONS :
 # Copy this script into your maya/scripts folder
-# And run these lines in with python:
+# Run these lines in with python:
 # "import pan_zoom_helper;"
 # "window = pan_zoom_helper.PAN_ZOOM_TOOL();"
 # "window.show();"
@@ -119,7 +120,6 @@ class PAN_ZOOM_TOOL(QMainWindow):
         main_layout.addLayout(self.layout_zoom_in_out_buttons)
 
         # Create the Reset Zoom button
-        # Layout_zoom_in_out_buttons = QHBoxLayout()
         self.reset_zoom_button = QPushButton('Reset Zoom')
         self.reset_zoom_button.clicked.connect(self.reset_zoom)
 
@@ -268,7 +268,7 @@ class PAN_ZOOM_TOOL(QMainWindow):
         preferences_class = PREFERENCES()
         shotcam = preferences_class.preferences.get('shotcam')
 
-        # Id Camera exists in scene, set it as text_field
+        # If Camera exists in scene, set it as text_field
         if cmds.objExists(shotcam):
 
             # Set textfield text
