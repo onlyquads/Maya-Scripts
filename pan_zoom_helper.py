@@ -13,7 +13,9 @@
 # "window.show();"
 
 import os
-from PySide2.QtWidgets import QMainWindow, QWidget, QHBoxLayout,QVBoxLayout, QPushButton, QFrame, QDoubleSpinBox, QLineEdit, QLabel, QCheckBox
+from PySide2.QtWidgets import (
+    QMainWindow, QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QFrame,
+    QDoubleSpinBox, QLineEdit, QLabel, QCheckBox)
 import maya.cmds as cmds
 
 
@@ -91,7 +93,8 @@ class PAN_ZOOM_TOOL(QMainWindow):
         self.layout_pan_zoom_options = QHBoxLayout()
 
         self.enable_pan_zoom_checkbox = QCheckBox('Pan Zoom')
-        self.enable_pan_zoom_checkbox.stateChanged.connect(self.on_pan_zoom_enable)
+        self.enable_pan_zoom_checkbox.stateChanged.connect(
+            self.on_pan_zoom_enable)
         self.reset_all_button = QPushButton('Reset')
         self.reset_all_button.clicked.connect(self.reset_all)
 
@@ -189,7 +192,10 @@ class PAN_ZOOM_TOOL(QMainWindow):
         main_layout.addWidget(hint_text_separator)
 
         # Add user hint text
-        user_hint_text = QLabel('<span style= font-size:8pt; text-align:center> <p>Use SHIFT + Click on  move/zoom button</p><p> to divide step value by 2</p>')
+        user_hint_text = QLabel(
+            '<span style= font-size:8pt; text-align:center>' +
+            '<p>Use SHIFT + Click on  move/zoom buttons</p>' +
+            '<p> to divide step value by 2</p>')
         main_layout.addWidget(user_hint_text)
 
         self.setCentralWidget(central_widget)
@@ -238,7 +244,7 @@ class PAN_ZOOM_TOOL(QMainWindow):
         if len(selected_cam) == 0:
             return cmds.warning("Please select a camera.")
 
-        if len(selected_cam) >=2 :
+        if len(selected_cam) >= 2:
             return cmds.warning("Please select only one camera.")
 
         if cmds.objectType(selected_cam[0]) == 'transform':
@@ -315,7 +321,7 @@ class PAN_ZOOM_TOOL(QMainWindow):
         if mod == 1:
             new_value = current_value - (zoom_step_value/2)
             if new_value <= 0:
-                return  cmds.warning("The value you try to set is below zero")
+                return cmds.warning("The value you try to set is below zero")
             cmds.setAttr(shotcam+'.zoom', new_value)
             return
 

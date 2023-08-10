@@ -1,7 +1,8 @@
 # This script is a workaround for maya artists working with Team Viewer.
 # As Team Viewer doesn’t send key pressed infos other than modifiers keys,
 # users cannot use some maya paint shortcuts.
-# Using this script users can increase/decrease paint brush values or soft selection radius value.
+# Using this script users can increase/decrease paint brush values or
+# soft selection radius value.
 
 import maya.cmds as cmds
 import maya.mel as mel
@@ -60,7 +61,7 @@ def set_brush_radius_from_button(label, *args):
         return cmds.warning("Not in Paint Context")
 
     mods = cmds.getModifiers()
-    if mods ==1:
+    if mods == 1:
         return cmds.floatField(user_specified_step, e=True, v=brush_radius)
 
     cmds.artAttrCtx(current_context, e=True, radius=brush_radius)
@@ -99,8 +100,10 @@ def set_softsel_radius_from_button(label, *args):
         return cmds.warning("Not in a transform context.")
     softsel_radius = label
     mods = cmds.getModifiers()
-    if mods ==1:
-        return cmds.floatField(user_specified_softsel_step, e=True, v=softsel_radius)
+    if mods == 1:
+        return cmds.floatField(
+            user_specified_softsel_step,
+            e=True, v=softsel_radius)
     cmds.softSelect(e=True, softSelectDistance=softsel_radius)
     print("Soft Selection Radius set to " + str(softsel_radius))
 
@@ -168,23 +171,33 @@ def open_graph_editor(*args):
     mel.eval('GraphEditor;')
 
 
-def open_tween_machine (*args):
+def open_tween_machine(*args):
     mel.eval('tweenMachine')
 
 
 # UI FUNCTIONS
 def populate_brush_radius_buttons():
     button_values = PRESET_VALUES.get('brush_buttons_values')
-    for i in button_values :
-        annotation_text = 'Set Brush Radius to ' + str(i) + ' Use SHIFT+CLICK to set as step value'
-        cmds.button(label=i,annotation=annotation_text, command=partial(set_brush_radius_from_button, i))
+    for i in button_values:
+        annotation_text = (
+            'Set Brush Radius to ' + str(i) +
+            ' Use SHIFT+CLICK to set as step value')
+        cmds.button(
+            label=i,
+            annotation=annotation_text,
+            command=partial(set_brush_radius_from_button, i))
 
 
 def populate_sofsel_radius_buttons():
     button_values = PRESET_VALUES.get('softsel_buttons_values')
     for i in button_values:
-        annotation_text = 'Set Soft Selection Radius to ' + str(i) + '. Use SHIFT+CLICK to set as step value'
-        cmds.button(label=i, annotation=annotation_text, command=partial(set_softsel_radius_from_button, i))
+        annotation_text = (
+            'Set Soft Selection Radius to ' + str(i) +
+            '. Use SHIFT+CLICK to set as step value')
+        cmds.button(
+            label=i,
+            annotation=annotation_text,
+            command=partial(set_softsel_radius_from_button, i))
 
 
 # Create window
@@ -198,20 +211,40 @@ cmds.text("Paint Brush Radius")
 cmds.separator(h=10)
 
 # PAINT BRUSH BUTTONS
-cmds.rowColumnLayout(adjustableColumn=True, numberOfColumns=3, columnWidth=[(1, 60), (2, 60), (3, 60)])
-cmds.button(label='+', annotation='Increase Brush Radius', command=increase_brush_radius, width=60)
+cmds.rowColumnLayout(
+    adjustableColumn=True,
+    numberOfColumns=3,
+    columnWidth=[(1, 60), (2, 60), (3, 60)])
+cmds.button(
+    label='+',
+    annotation='Increase Brush Radius',
+    command=increase_brush_radius,
+    width=60)
 step_default_value = PRESET_VALUES.get('brush_step_default_value')
-user_specified_step = cmds.floatField(editable=True, width=60, v=step_default_value, annotation="Set Step Value")
-cmds.button(label='-', annotation='decrease Brush Radius', command=decrease_brush_radius, width=60)
+user_specified_step = cmds.floatField(
+    editable=True, width=60,
+    v=step_default_value,
+    annotation="Set Step Value")
+cmds.button(
+    label='-',
+    annotation='decrease Brush Radius',
+    command=decrease_brush_radius,
+    width=60)
 populate_brush_radius_buttons()
 cmds.setParent('..')
 
 # REPLACE SMOOTH AND FLOOD BUTTONS
-cmds.rowColumnLayout(adjustableColumn=True, numberOfColumns=2, columnWidth=[(1, 90), (2, 90)])
+cmds.rowColumnLayout(
+    adjustableColumn=True, numberOfColumns=2, columnWidth=[(1, 90), (2, 90)])
 cmds.button(label='Replace', command=set_operation_replace)
 cmds.button(label='Smooth', command=set_operation_smooth)
 cmds.setParent('..')
-cmds.button(label='Flood', command=flood_user_value, annotation='Flood Smooth or Replace with value 1.  Use SHIFT+CLICK to Flood replace with value 0')
+cmds.button(
+    label='Flood', command=flood_user_value,
+    annotation=(
+        'Flood Smooth or Replace with value 1.' +
+        'Use SHIFT+CLICK to Flood replace with value 0')
+    )
 
 # SOFT SELECTION RADIUS TITLE
 cmds.rowColumnLayout(adjustableColumn=True, numberOfColumns=1, w=window_width)
@@ -220,23 +253,43 @@ cmds.text("Soft Selection Radius")
 cmds.separator(h=10)
 
 # SOFT SELECTION RADIUS BUTTONS
-cmds.rowColumnLayout(adjustableColumn=True, numberOfColumns=3, columnWidth=[(1, 60), (2, 60), (3, 60)])
+cmds.rowColumnLayout(
+    adjustableColumn=True,
+    numberOfColumns=3,
+    columnWidth=[(1, 60), (2, 60), (3, 60)])
 
-cmds.button(label='+', annotation='Increase Soft Selection Radius', command=increase_softsel_radius, width=60)
+cmds.button(
+    label='+',
+    annotation='Increase Soft Selection Radius',
+    command=increase_softsel_radius,
+    width=60)
 step_default_value = PRESET_VALUES.get('softsel_step_default_value')
-user_specified_softsel_step = cmds.floatField(editable=True, width=60, v=step_default_value, annotation="Set Step Value")
-cmds.button(label='-', annotation='decrease Soft Selection Radius', command=decrease_softsel_radius, width=60)
+user_specified_softsel_step = cmds.floatField(
+    editable=True, width=60, v=step_default_value, annotation="Set Step Value")
+cmds.button(
+    label='-',
+    annotation='decrease Soft Selection Radius',
+    command=decrease_softsel_radius,
+    width=60)
 populate_sofsel_radius_buttons()
 
 # SOFT SELECTION FALLOFF MODE BUTTONS
 cmds.text(label='Falloff: ', width=60)
-cmds.button(label='Volume', command=partial(set_softsel_fallof_mode, 'Volume'), width=60)
-cmds.button(label='Surface', command=partial(set_softsel_fallof_mode, 'Surface'), width=60)
+cmds.button(
+    label='Volume',
+    command=partial(set_softsel_fallof_mode, 'Volume'),
+    width=60)
+cmds.button(
+    label='Surface',
+    command=partial(set_softsel_fallof_mode, 'Surface'),
+    width=60)
 
 # TRANSFORM CONSTRAINT MODE BUTTONS
 cmds.text(label='Constraint: ', width=60)
-cmds.button(label='Off', command=partial(set_edge_constraint, 'none'), width=60)
-cmds.button(label='EdgeLoop', command=partial(set_edge_constraint, 'edge'), width=60)
+cmds.button(
+    label='Off', command=partial(set_edge_constraint, 'none'), width=60)
+cmds.button(
+    label='EdgeLoop', command=partial(set_edge_constraint, 'edge'), width=60)
 cmds.setParent('..')
 
 # EXTRAS TEXT AND BUTTONS
