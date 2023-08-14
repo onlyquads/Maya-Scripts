@@ -2,8 +2,8 @@
 #
 # This script allows user to easily use maya's pan/zoom options.
 # You need to set the camera you want to work on
-# You can set production camera into the preferences class
-# so the script will automatically set it.
+# You can setup a production camera in the SHOTCAM variable
+# so the script will automatically set it if found in the scene.
 #
 # INSTALLATION INSTRUCTIONS :
 # Copy this script into your maya/scripts folder
