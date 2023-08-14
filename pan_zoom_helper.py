@@ -9,7 +9,7 @@
 # Copy this script into your maya/scripts folder
 # Run these lines in with python:
 # "import pan_zoom_helper;"
-# "window = pan_zoom_helper.PAN_ZOOM_TOOL();"
+# "window = pan_zoom_helper.PanZoomTool();"
 # "window.show();"
 
 import os
@@ -31,18 +31,18 @@ ZOOM_STEP_VALUE = 0.1,
 os.environ['QT_MAC_WANTS_LAYER'] = '1'
 
 
-class SEPARATOR_LINE(QFrame):
+class SeparatorLine(QFrame):
     def __init__(self, parent=None):
-        super(SEPARATOR_LINE, self).__init__(parent)
+        super(SeparatorLine, self).__init__(parent)
         self.setFrameShape(QFrame.HLine)
         self.setFrameShadow(QFrame.Sunken)
 
 
-class PAN_ZOOM_TOOL(QMainWindow):
+class PanZoomTool(QMainWindow):
 
     def __init__(self):
 
-        super(PAN_ZOOM_TOOL, self).__init__()
+        super(PanZoomTool, self).__init__()
         self.setWindowTitle('PAN ZOOM TOOL')
 
         # Load layout
@@ -82,7 +82,7 @@ class PAN_ZOOM_TOOL(QMainWindow):
         main_layout.addLayout(self.camera_setup_layout)
 
         # Add separator
-        camera_name_separator = SEPARATOR_LINE(self)
+        camera_name_separator = SeparatorLine(self)
         main_layout.addWidget(camera_name_separator)
 
         # Create PanZoom Enable/Disable and reset options
@@ -101,7 +101,7 @@ class PAN_ZOOM_TOOL(QMainWindow):
         main_layout.addLayout(self.layout_pan_zoom_options)
 
         # Add separator
-        pan_zoom_options_separator = SEPARATOR_LINE(self)
+        pan_zoom_options_separator = SeparatorLine(self)
         main_layout.addWidget(pan_zoom_options_separator)
 
         # Create the Zoom buttons
@@ -126,7 +126,7 @@ class PAN_ZOOM_TOOL(QMainWindow):
         main_layout.addWidget(self.reset_zoom_button)
 
         # Add separator
-        zoom_buttons_separator = SEPARATOR_LINE(self)
+        zoom_buttons_separator = SeparatorLine(self)
         main_layout.addWidget(zoom_buttons_separator)
 
         # Create the move buttons
@@ -152,7 +152,7 @@ class PAN_ZOOM_TOOL(QMainWindow):
         main_layout.addWidget(self.reset_move_button)
 
         # Add separator
-        move_buttons_separator = SEPARATOR_LINE(self)
+        move_buttons_separator = SeparatorLine(self)
         main_layout.addWidget(move_buttons_separator)
 
         # Create user zoom step options
@@ -184,7 +184,7 @@ class PAN_ZOOM_TOOL(QMainWindow):
         main_layout.addLayout(self.layout_user_move_step)
 
         # Add separator
-        hint_text_separator = SEPARATOR_LINE(self)
+        hint_text_separator = SeparatorLine(self)
         main_layout.addWidget(hint_text_separator)
 
         # Add user hint text
@@ -416,5 +416,5 @@ class PAN_ZOOM_TOOL(QMainWindow):
 
 
 def show():
-    window = PAN_ZOOM_TOOL()
+    window = PanZoomTool()
     window.show()
