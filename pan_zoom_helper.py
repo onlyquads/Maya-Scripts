@@ -20,11 +20,11 @@ import maya.cmds as cmds
 
 
 # Set production camera here below
-SHOTCAM = 'cameraShape1',
+SHOTCAM = 'cameraShape1'
 # Change default move step value below
-MOVE_STEP_VALUE = 0.1,
+MOVE_STEP_VALUE = 0.1
 # Change default zoom step value below
-ZOOM_STEP_VALUE = 0.1,
+ZOOM_STEP_VALUE = 0.1
 
 
 # FOR MAC OS WE NEED THIS LINE FOR PYTHON 2.7
