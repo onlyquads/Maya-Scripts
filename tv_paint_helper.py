@@ -8,24 +8,21 @@ import maya.cmds as cmds
 import maya.mel as mel
 from functools import partial
 
-tv_paint_tools_version = 1.2
-
 # EDIT VALUES HERE TO CHANGE DEFAULT STEP VALUE AND BUTTONS VALUES.
 # YOU CAN ADD MORE BUTTONS TOO
-PRESET_VALUES = dict(
-    brush_step_default_value=0.05,
-    brush_buttons_values=[
-        (0.005),
-        (0.01),
-        (0.04)
-        ],
-    softsel_step_default_value=0.1,
-    softsel_buttons_values=[
-        (0.01),
-        (0.1),
-        (1)
+DEFAULT_BRUSH_STEP_VALUE = 0.05
+BRUSH_BUTTONS_VALUES = [
+    (0.005),
+    (0.01),
+    (0.04)
     ]
-)
+
+DEFAULT_SOFTSEL_STEP_VALUE = 0.1
+SOFTSEL_BUTTONS_VALUES = [
+    (0.01),
+    (0.1),
+    (1)
+    ]
 
 
 # PAINT BRUSH FUNCTIONS
@@ -177,7 +174,7 @@ def open_tween_machine(*args):
 
 # UI FUNCTIONS
 def populate_brush_radius_buttons():
-    button_values = PRESET_VALUES.get('brush_buttons_values')
+    button_values = BRUSH_BUTTONS_VALUES
     for i in button_values:
         annotation_text = (
             'Set Brush Radius to ' + str(i) +
@@ -189,7 +186,7 @@ def populate_brush_radius_buttons():
 
 
 def populate_sofsel_radius_buttons():
-    button_values = PRESET_VALUES.get('softsel_buttons_values')
+    button_values = SOFTSEL_BUTTONS_VALUES
     for i in button_values:
         annotation_text = (
             'Set Soft Selection Radius to ' + str(i) +
@@ -220,7 +217,7 @@ cmds.button(
     annotation='Increase Brush Radius',
     command=increase_brush_radius,
     width=60)
-step_default_value = PRESET_VALUES.get('brush_step_default_value')
+step_default_value = DEFAULT_BRUSH_STEP_VALUE
 user_specified_step = cmds.floatField(
     editable=True, width=60,
     v=step_default_value,
@@ -263,7 +260,7 @@ cmds.button(
     annotation='Increase Soft Selection Radius',
     command=increase_softsel_radius,
     width=60)
-step_default_value = PRESET_VALUES.get('softsel_step_default_value')
+step_default_value = DEFAULT_SOFTSEL_STEP_VALUE
 user_specified_softsel_step = cmds.floatField(
     editable=True, width=60, v=step_default_value, annotation="Set Step Value")
 cmds.button(

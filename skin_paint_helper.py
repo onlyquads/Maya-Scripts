@@ -5,24 +5,21 @@ import maya.cmds as cmds
 import maya.mel as mel
 from functools import partial
 
-skin_paint_version = 1.0
+# You can edit the default step value here
+DEFAULT_STEP_VALUE = 1
 
-SKIN_PAINT_PRESET_VALUES = dict(
-
-    default_step_value=1,
-    # You can edit, remove, add values of buttons here.
-    skin_paint_values=[
-        (0),
-        (0.25),
-        (0.50),
-        (0.75),
-        (1),
-        (0.1),
-        (0.2),
-        (0.8),
-        (0.9)
+# You can edit, remove, add values of buttons here.
+SKIN_PAINT_VALUES = [
+    (0),
+    (0.25),
+    (0.50),
+    (0.75),
+    (1),
+    (0.1),
+    (0.2),
+    (0.8),
+    (0.9)
     ]
-)
 
 
 def get_current_paint_value():
@@ -130,7 +127,7 @@ def set_operation_smooth(*args):
 
 
 def populate_skin_paint_buttons():
-    values_list = SKIN_PAINT_PRESET_VALUES.get('skin_paint_values')
+    values_list = SKIN_PAINT_VALUES
 
     for i in values_list:
         annotation_text = (
@@ -182,7 +179,7 @@ cmds.button(
     annotation='Increase paint Value',
     command=increase_paint_value,
     width=60)
-default_step_value = SKIN_PAINT_PRESET_VALUES.get('default_step_value')
+default_step_value = DEFAULT_STEP_VALUE
 user_specified_step = cmds.floatField(
     editable=True,
     width=60,
