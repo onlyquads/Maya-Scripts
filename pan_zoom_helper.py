@@ -19,20 +19,16 @@ from PySide2.QtWidgets import (
 import maya.cmds as cmds
 
 
+# Set production camera here below
+SHOTCAM = 'cameraShape1',
+# Change default move step value below
+MOVE_STEP_VALUE = 0.1,
+# Change default zoom step value below
+ZOOM_STEP_VALUE = 0.1,
+
+
 # FOR MAC OS WE NEED THIS LINE FOR PYTHON 2.7
 os.environ['QT_MAC_WANTS_LAYER'] = '1'
-
-
-class PREFERENCES(object):
-
-    preferences = dict(
-        # Set production camera here below
-        shotcam='cameraShape1',
-        # Change default move step value below
-        move_step_value=0.1,
-        # Change default zoom step value below
-        zoom_step_value=0.1,
-    )
 
 
 class SEPARATOR_LINE(QFrame):
@@ -271,8 +267,7 @@ class PAN_ZOOM_TOOL(QMainWindow):
 
     def get_production_camera(self):
 
-        preferences_class = PREFERENCES()
-        shotcam = preferences_class.preferences.get('shotcam')
+        shotcam = SHOTCAM
 
         # If Camera exists in scene, set it as text_field
         if cmds.objExists(shotcam):
@@ -301,9 +296,8 @@ class PAN_ZOOM_TOOL(QMainWindow):
 
     def set_default_move_zoom_step(self):
 
-        prefs = PREFERENCES()
-        default_move_step_value = prefs.preferences.get('move_step_value')
-        default_zoom_step_value = prefs.preferences.get('zoom_step_value')
+        default_move_step_value = MOVE_STEP_VALUE
+        default_zoom_step_value = ZOOM_STEP_VALUE
 
         if default_move_step_value:
             self.move_step_spinbox.setValue(default_move_step_value)
