@@ -313,7 +313,7 @@ class PanZoomTool(QMainWindow):
         # If mod key pressed
         mod = cmds.getModifiers()
         if mod == 1:
-            new_value = current_value - (zoom_step_value/2)
+            new_value = current_value - (zoom_step_value / 2)
             if new_value <= 0:
                 return cmds.warning("The value you try to set is below zero")
             cmds.setAttr(shotcam+'.zoom', new_value)
