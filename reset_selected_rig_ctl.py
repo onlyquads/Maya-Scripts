@@ -43,4 +43,5 @@ def reset_selected():
         set_attr(i)
 
 
-reset_selected()
+if __name__ == '__main__':
+    reset_selected()
