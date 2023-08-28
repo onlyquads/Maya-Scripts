@@ -9,20 +9,17 @@ def get_position(target_name):
     rot_x = cmds.getAttr(target_name + '.rotateX')
     rot_y = cmds.getAttr(target_name + '.rotateY')
     rot_z = cmds.getAttr(target_name + '.rotateZ')
-    print('target position stored')
     return pos_x, pos_y, pos_z, rot_x, rot_y, rot_z
 
 
-selection = cmds.ls(selection=True)
-print(selection)
-
-pos_x, pos_y, pos_z, rot_x, rot_y, rot_z = get_position(selection[1])
-
-first_object = selection[0]
-cmds.setAttr(first_object + '.translateX', pos_x)
-cmds.setAttr(first_object + '.translateY', pos_y)
-cmds.setAttr(first_object + '.translateZ', pos_z)
-cmds.setAttr(first_object + '.rotateX', rot_x)
-cmds.setAttr(first_object + '.rotateY', rot_y)
-cmds.setAttr(first_object + '.rotateZ', rot_z)
-print('Align done')
+def align_to_last_selected_object():
+    selection = cmds.ls(selection=True)
+    pos_x, pos_y, pos_z, rot_x, rot_y, rot_z = get_position(selection[-1])
+    selection.remove(selection[-1])
+    for i in selection:
+        cmds.setAttr(i + '.translateX', pos_x)
+        cmds.setAttr(i + '.translateY', pos_y)
+        cmds.setAttr(i + '.translateZ', pos_z)
+        cmds.setAttr(i + '.rotateX', rot_x)
+        cmds.setAttr(i + '.rotateY', rot_y)
+        cmds.setAttr(i + '.rotateZ', rot_z)
