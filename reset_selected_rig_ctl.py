@@ -35,7 +35,7 @@ def set_attr(object_name):
 
 def reset_selected():
 
-    selected_objects = cmds.ls(selection=True)
+    selected_objects = cmds.ls(selection=True, tr=True)
     if not selected_objects:
         return cmds.warning(
             'No object selected. Please select objects.')
