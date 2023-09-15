@@ -8,9 +8,9 @@
 # INSTALLATION INSTRUCTIONS :
 # Copy this script into your maya/scripts folder
 # Run these lines in with python:
-# "import pan_zoom_helper;"
-# "window = pan_zoom_helper.PanZoomTool();"
-# "window.show();"
+# import pan_zoom_helper;
+# window = pan_zoom_helper.PanZoomTool();
+# window.show();
 
 import os
 from PySide2.QtWidgets import (
