@@ -1,24 +1,30 @@
 # Pan Zoom Helper
 #
-# This script allows user to easily use maya's pan/zoom options.
-# You need to set the camera you want to work on
+# This script allow users to easily manipulate maya's pan/zoom.
+# You need to set the camera you want to work with
 # You can setup a production camera in the SHOTCAM variable
 # so the script will automatically set it if found in the scene.
 #
+# Tested maya 2020, 2022
+#
 # INSTALLATION INSTRUCTIONS :
+# As Shelf tool:
 # Copy this script into your maya/scripts folder
-# Run these lines in with python:
+# Run these lines in python:
 # import pan_zoom_helper;
 # window = pan_zoom_helper.PanZoomTool();
 # window.show();
+#
+# On the go:
+# Copy/Paste this code in maya python console and run
 
 import os
-from PySide2 import QtCore
+import sys
+from PySide2 import QtWidgets, QtCore
 from PySide2.QtWidgets import (
     QMainWindow, QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QFrame,
     QDoubleSpinBox, QLineEdit, QLabel, QCheckBox)
 import maya.cmds as cmds
-
 
 # Set production camera here below
 SHOTCAM = 'cameraShape1'
@@ -44,7 +50,7 @@ class PanZoomTool(QMainWindow):
     def __init__(self):
 
         super(PanZoomTool, self).__init__()
-        self.setWindowTitle('PAN ZOOM TOOL')
+        self.setWindowTitle('PAN ZOOM TOOL 1.1')
 
         self.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
 
@@ -416,6 +422,18 @@ class PanZoomTool(QMainWindow):
     def reset_all(self):
         self.reset_zoom()
         self.reset_move()
+
+
+if __name__ == '__main__':
+
+    if not QtWidgets.QApplication.instance():
+        app = QtWidgets.QApplication(sys.argv)
+    else:
+        app = QtWidgets.QApplication.instance()
+
+    window = PanZoomTool()
+    window.show()
+    app.exec_()
 
 
 def show():
