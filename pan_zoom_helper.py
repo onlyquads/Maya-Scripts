@@ -13,6 +13,7 @@
 # window.show();
 
 import os
+from PySide2 import QtCore
 from PySide2.QtWidgets import (
     QMainWindow, QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QFrame,
     QDoubleSpinBox, QLineEdit, QLabel, QCheckBox)
@@ -44,6 +45,8 @@ class PanZoomTool(QMainWindow):
 
         super(PanZoomTool, self).__init__()
         self.setWindowTitle('PAN ZOOM TOOL')
+
+        self.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
 
         # Load layout
         self.load_ui()
