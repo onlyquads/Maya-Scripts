@@ -1,22 +1,25 @@
-# Pan Zoom Helper
-#
-# This script allow users to easily manipulate maya's pan/zoom.
-# You need to set the camera you want to work with
-# You can setup a production camera in the SHOTCAM variable
-# so the script will automatically set it if found in the scene.
-#
-# Tested maya 2020, 2022
-#
+''' 
+### Pan Zoom Helper ###
+This script allow users to easily manipulate maya's pan/zoom.
+You need to set the camera you want to work with
+You can setup a production camera in the SHOTCAM variable
+so the script will automatically set it if found in the scene.
+
+Tested maya 2020, 2022
+
+Author: NicoG
+
 # INSTALLATION INSTRUCTIONS :
-# As Shelf tool:
-# Copy this script into your maya/scripts folder
-# Run these lines in python:
-# import pan_zoom_helper;
-# window = pan_zoom_helper.PanZoomTool();
-# window.show();
+As Shelf tool:
+Copy this script into your maya/scripts folder
+Run these lines in python:
+import pan_zoom_helper;
+window = pan_zoom_helper.PanZoomTool();
+window.show();
 #
 # On the go:
-# Copy/Paste this code in maya python console and run
+Copy/Paste this code in maya python console and run
+'''
 
 import os
 import sys
@@ -38,6 +41,14 @@ ZOOM_STEP_VALUE = 0.1
 os.environ['QT_MAC_WANTS_LAYER'] = '1'
 
 
+def maya_main_window():
+    """Return Maya's main window"""
+    for obj in QtWidgets.QApplication.topLevelWidgets():
+        if obj.objectName() == 'MayaWindow':
+            return obj
+    raise RuntimeError('Could not find MayaWindow instance')
+
+
 class SeparatorLine(QFrame):
     def __init__(self, parent=None):
         super(SeparatorLine, self).__init__(parent)
@@ -47,12 +58,14 @@ class SeparatorLine(QFrame):
 
 class PanZoomTool(QMainWindow):
 
-    def __init__(self):
+    def __init__(self, parent=None):
+        if not parent:
+            parent = maya_main_window()
 
-        super(PanZoomTool, self).__init__()
+        super(PanZoomTool, self).__init__(parent)
         self.setWindowTitle('PAN ZOOM TOOL 1.1')
 
-        self.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
+        self.setWindowFlags(QtCore.Qt.Tool)
 
         # Load layout
         self.load_ui()
@@ -438,4 +451,4 @@ if __name__ == '__main__':
 
 def show():
     window = PanZoomTool()
-    window.show()
+    window.show(parent=maya_main_window())
