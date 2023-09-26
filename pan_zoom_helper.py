@@ -1,4 +1,4 @@
-''' 
+'''
 ### Pan Zoom Helper ###
 This script allow users to easily manipulate maya's pan/zoom.
 You need to set the camera you want to work with
@@ -40,6 +40,15 @@ ZOOM_STEP_VALUE = 0.1
 # FOR MAC OS WE NEED THIS LINE FOR PYTHON 2.7
 os.environ['QT_MAC_WANTS_LAYER'] = '1'
 
+
+def maya_main_window():
+    """Return Maya's main window"""
+    for obj in QtWidgets.QApplication.topLevelWidgets():
+        if obj.objectName() == 'MayaWindow':
+            return obj
+    raise RuntimeError('Could not find MayaWindow instance')
+
+
 class SeparatorLine(QFrame):
     def __init__(self, parent=None):
         super(SeparatorLine, self).__init__(parent)
@@ -49,9 +58,12 @@ class SeparatorLine(QFrame):
 
 class PanZoomTool(QMainWindow):
 
-    def __init__(self):
+    def __init__(self, parent=None):
 
-        super(PanZoomTool, self).__init__()
+        if not parent:
+            parent = maya_main_window()
+
+        super(PanZoomTool, self).__init__(parent)
         self.setWindowTitle('PAN ZOOM TOOL 1.1')
 
         self.setWindowFlags(QtCore.Qt.Tool)
@@ -440,4 +452,4 @@ if __name__ == '__main__':
 
 def show():
     window = PanZoomTool()
-    window.show()
+    window.show(parent=maya_main_window())
