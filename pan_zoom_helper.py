@@ -16,9 +16,17 @@ Run these lines in python:
 import pan_zoom_helper;
 window = pan_zoom_helper.PanZoomTool();
 window.show();
-#
-# On the go:
-Copy/Paste this code in maya python console and run
+
+# ON THE GO:
+Copy/Paste this whole page of code in maya python console and run
+
+You can also specify the camera you want to tweak like this :
+
+window = pan_zoom_helper.PanZoomTool(shotcam='your_shotcam_shape_name');
+
+# Make sure to replace the 'your_shotcam_shape_name' with you're camera
+shape name
+
 '''
 
 import os
@@ -30,7 +38,7 @@ from PySide2.QtWidgets import (
 import maya.cmds as cmds
 
 # Set production camera here below
-SHOTCAM = 'cameraShape1'
+SHOTCAM = 'perspShape'
 # Change default move step value below
 MOVE_STEP_VALUE = 0.1
 # Change default zoom step value below
@@ -58,7 +66,7 @@ class SeparatorLine(QFrame):
 
 class PanZoomTool(QMainWindow):
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, shotcam=SHOTCAM):
 
         if not parent:
             parent = maya_main_window()
@@ -67,6 +75,8 @@ class PanZoomTool(QMainWindow):
         self.setWindowTitle('PAN ZOOM TOOL 1.1')
 
         self.setWindowFlags(QtCore.Qt.Tool)
+
+        self.shotcam = shotcam
 
         # Load layout
         self.load_ui()
@@ -290,7 +300,7 @@ class PanZoomTool(QMainWindow):
 
     def get_production_camera(self):
 
-        shotcam = SHOTCAM
+        shotcam = self.shotcam
 
         # If Camera exists in scene, set it as text_field
         if cmds.objExists(shotcam):
@@ -451,5 +461,5 @@ if __name__ == '__main__':
 
 
 def show():
-    window = PanZoomTool()
+    window = PanZoomTool(shotcam=SHOTCAM)
     window.show(parent=maya_main_window())
