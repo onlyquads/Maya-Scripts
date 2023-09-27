@@ -44,6 +44,7 @@ MOVE_STEP_VALUE = 0.1
 # Change default zoom step value below
 ZOOM_STEP_VALUE = 0.1
 
+TOOLNAME = 'PAN ZOOM TOOL 1.2'
 
 # FOR MAC OS WE NEED THIS LINE FOR PYTHON 2.7
 os.environ['QT_MAC_WANTS_LAYER'] = '1'
@@ -72,7 +73,7 @@ class PanZoomTool(QMainWindow):
             parent = maya_main_window()
 
         super(PanZoomTool, self).__init__(parent)
-        self.setWindowTitle('PAN ZOOM TOOL 1.1')
+        self.setWindowTitle(TOOLNAME)
 
         self.setWindowFlags(QtCore.Qt.Tool)
 
@@ -462,4 +463,4 @@ if __name__ == '__main__':
 
 def show():
     window = PanZoomTool(shotcam=SHOTCAM)
-    window.show(parent=maya_main_window())
+    window.show()
