@@ -2,29 +2,30 @@
 ### Pan Zoom Helper ###
 This script allow users to easily manipulate maya's pan/zoom.
 You need to set the camera you want to work with
-You can setup a production camera in the SHOTCAM variable
-so the script will automatically set it if found in the scene.
+You can either setup a production camera in the SHOTCAM variable or by
+setting it when calling the script (see Pipeline integration below)
+so the tool will automatically set it if found in the scene.
 
 Tested maya 2020, 2022
 
 Author: NicoG
+
+# ON THE GO:
+Copy/Paste this whole page of code in maya python console and run
 
 # INSTALLATION INSTRUCTIONS :
 As Shelf tool:
 Copy this script into your maya/scripts folder
 Run these lines in python:
 import pan_zoom_helper;
-window = pan_zoom_helper.PanZoomTool();
+window = pan_zoom_helper.PanZoomHelper();
 window.show();
 
-# ON THE GO:
-Copy/Paste this whole page of code in maya python console and run
+# PIPELINE INTEGRATION
+You can also specify the camera you want to set by default like this :
+window = pan_zoom_helper.PanZoomHelper(shotcam='your_shotcam_shape_name');
 
-You can also specify the camera you want to tweak like this :
-
-window = pan_zoom_helper.PanZoomTool(shotcam='your_shotcam_shape_name');
-
-# Make sure to replace the 'your_shotcam_shape_name' with you're camera
+Make sure to replace the 'your_shotcam_shape_name' with you're camera
 shape name
 
 '''
@@ -44,7 +45,7 @@ MOVE_STEP_VALUE = 0.1
 # Change default zoom step value below
 ZOOM_STEP_VALUE = 0.1
 
-TOOLNAME = 'PAN ZOOM TOOL 1.2'
+TOOLNAME = 'PAN ZOOM HELPER 1.3'
 
 # FOR MAC OS WE NEED THIS LINE FOR PYTHON 2.7
 os.environ['QT_MAC_WANTS_LAYER'] = '1'
@@ -65,14 +66,14 @@ class SeparatorLine(QFrame):
         self.setFrameShadow(QFrame.Sunken)
 
 
-class PanZoomTool(QMainWindow):
+class PanZoomHelper(QMainWindow):
 
     def __init__(self, parent=None, shotcam=SHOTCAM):
 
         if not parent:
             parent = maya_main_window()
 
-        super(PanZoomTool, self).__init__(parent)
+        super(PanZoomHelper, self).__init__(parent)
         self.setWindowTitle(TOOLNAME)
 
         self.setWindowFlags(QtCore.Qt.Tool)
@@ -456,11 +457,11 @@ if __name__ == '__main__':
     else:
         app = QtWidgets.QApplication.instance()
 
-    window = PanZoomTool()
+    window = PanZoomHelper()
     window.show()
     app.exec_()
 
 
 def show():
-    window = PanZoomTool(shotcam=SHOTCAM)
+    window = PanZoomHelper(shotcam=SHOTCAM)
     window.show()
