@@ -299,28 +299,39 @@ class PanZoomHelper(QMainWindow):
 
             return shotcam
         return cmds.warning("The selected object is not a camera")
+    
+    def activate(self, shotcam):
+        '''If Camera exists in scene, set it as text_field and activate
+        UI buttons'''
+        # Set textfield text
+        self.camera_name_text_field.setText(shotcam)
+        # Enable buttons
+        self.enable_zoom_option_buttons(True)
+
+        # Get current shotcam status
+        pan_zoom_enabled = self.get_current_pan_zoom_status()
+        self.enable_pan_zoom_checkbox.setChecked(pan_zoom_enabled)
+
 
     def get_production_camera(self):
 
+        # Try to set shotcam from external
         shotcam = self.shotcam
-
-        # If Camera exists in scene, set it as text_field
         if cmds.objExists(shotcam):
+            self.activate(shotcam)
+            return
 
-            # Set textfield text
-            self.camera_name_text_field.setText(shotcam)
-            # Enable buttons
-            self.enable_zoom_option_buttons(True)
+        # Try to set shotcam from script SHOTCAM var
+        shotcam = SHOTCAM
+        if cmds.objExists(shotcam):
+            self.activate(shotcam)
+            return
 
-            # Get current shotcam status
-            pan_zoom_enabled = self.get_current_pan_zoom_status()
-            self.enable_pan_zoom_checkbox.setChecked(pan_zoom_enabled)
-
-        else:
-            shotcam = 'Camera Is Not Set!'
-            self.camera_name_text_field.setText(shotcam)
-            print("No production or prefered camera found in scene.")
-            self.enable_zoom_option_buttons(False)
+        # If no shotcam found
+        shotcam = 'Camera Is Not Set!'
+        self.camera_name_text_field.setText(shotcam)
+        print("No production or prefered camera found in scene.")
+        self.enable_zoom_option_buttons(False)
 
     def get_current_pan_zoom_status(self):
         shotcam = self.camera_name_text_field.text()
