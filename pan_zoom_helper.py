@@ -50,6 +50,7 @@ TOOLNAME = 'PAN ZOOM HELPER 1.3'
 # FOR MAC OS WE NEED THIS LINE FOR PYTHON 2.7
 os.environ['QT_MAC_WANTS_LAYER'] = '1'
 
+window = None
 
 def maya_main_window():
     """Return Maya's main window"""
@@ -224,9 +225,9 @@ class PanZoomHelper(QMainWindow):
 
         # Add user hint text
         user_hint_text = QLabel(
-            '<span style= font-size:8pt; text-align:center>' +
-            '<p>Use SHIFT + Click on  move/zoom buttons</p>' +
-            '<p> to divide step value by 2</p>')
+            '''<span style= font-size:9pt; text-align:center>
+            <p>Use SHIFT + Click on  move/zoom buttons
+            <p>to divide step value by 2</p>''')
         main_layout.addWidget(user_hint_text)
 
         self.setCentralWidget(central_widget)
@@ -295,23 +296,22 @@ class PanZoomHelper(QMainWindow):
         camera = cmds.objectType(selected_cam)
         if camera in ['camera', 'stereoRigCamera']:
             shotcam = selected_cam[0]
-            self.camera_name_text_field.setText(shotcam)
+            self.camera_name_text_field.setText(str(shotcam))
 
             return shotcam
         return cmds.warning("The selected object is not a camera")
-    
+
     def activate(self, shotcam):
         '''If Camera exists in scene, set it as text_field and activate
         UI buttons'''
         # Set textfield text
-        self.camera_name_text_field.setText(shotcam)
+        self.camera_name_text_field.setText(str(shotcam))
         # Enable buttons
         self.enable_zoom_option_buttons(True)
 
         # Get current shotcam status
         pan_zoom_enabled = self.get_current_pan_zoom_status()
         self.enable_pan_zoom_checkbox.setChecked(pan_zoom_enabled)
-
 
     def get_production_camera(self):
 
@@ -329,7 +329,7 @@ class PanZoomHelper(QMainWindow):
 
         # If no shotcam found
         shotcam = 'Camera Is Not Set!'
-        self.camera_name_text_field.setText(shotcam)
+        self.camera_name_text_field.setText(str(shotcam))
         print("No production or prefered camera found in scene.")
         self.enable_zoom_option_buttons(False)
 
@@ -337,7 +337,7 @@ class PanZoomHelper(QMainWindow):
         shotcam = self.camera_name_text_field.text()
 
         if cmds.objExists(shotcam):
-            pan_zoom_enabled = cmds.getAttr(shotcam + '.panZoomEnabled')
+            pan_zoom_enabled = cmds.getAttr('%s.panZoomEnabled' % shotcam)
             return pan_zoom_enabled
 
     def set_default_move_zoom_step(self):
@@ -354,7 +354,7 @@ class PanZoomHelper(QMainWindow):
     def zoom_in(self):
         zoom_step_value = self.zoom_step_spinbox.value()
         shotcam = self.camera_name_text_field.text()
-        current_value = cmds.getAttr(shotcam + '.zoom')
+        current_value = cmds.getAttr('%s.zoom' % shotcam)
 
         # If mod key pressed
         mod = cmds.getModifiers()
@@ -362,19 +362,19 @@ class PanZoomHelper(QMainWindow):
             new_value = current_value - (zoom_step_value / 2)
             if new_value <= 0:
                 return cmds.warning("The value you try to set is below zero")
-            cmds.setAttr(shotcam+'.zoom', new_value)
+            cmds.setAttr('%s.zoom' % shotcam, new_value)
             return
 
         new_value = current_value - zoom_step_value
         if new_value <= 0:
             return cmds.warning("The value you try to set is below zero")
-        cmds.setAttr(shotcam + '.zoom', new_value)
+        cmds.setAttr('%s.zoom' % shotcam, new_value)
         return
 
     def zoom_out(self, *args):
         zoom_step_value = self.zoom_step_spinbox.value()
         shotcam = self.camera_name_text_field.text()
-        current_value = cmds.getAttr(shotcam + '.zoom')
+        current_value = cmds.getAttr('%s.zoom' % shotcam)
 
         # If mod key pressed
         mod = cmds.getModifiers()
@@ -382,31 +382,31 @@ class PanZoomHelper(QMainWindow):
             new_value = current_value + (zoom_step_value / 2)
             if new_value <= 0:
                 return cmds.warning("The value you try to set is below zero")
-            cmds.setAttr(shotcam + '.zoom', new_value)
+            cmds.setAttr('%s.zoom' % shotcam, new_value)
             return
 
         new_value = current_value + zoom_step_value
         if new_value <= 0:
             return cmds.warning("The value you try to set is below zero")
-        cmds.setAttr(shotcam + '.zoom', new_value)
+        cmds.setAttr('%s.zoom' % shotcam, new_value)
         return
 
     def reset_zoom(self):
         shotcam = self.camera_name_text_field.text()
-        cmds.setAttr(shotcam + '.zoom', 1)
+        cmds.setAttr('%s.zoom' % shotcam, 1)
 
     def move_up(self):
         mod = cmds.getModifiers()
         move_step_value = self.move_step_spinbox.value()
         shotcam = self.camera_name_text_field.text()
 
-        current_value = cmds.getAttr(shotcam + '.verticalPan')
+        current_value = cmds.getAttr('%s.verticalPan' % shotcam)
         if mod == 1:
             new_value = current_value + (move_step_value / 2)
-            cmds.setAttr(shotcam + '.verticalPan', new_value)
+            cmds.setAttr('%s.verticalPan' % shotcam, new_value)
             return
         new_value = current_value + move_step_value
-        cmds.setAttr(shotcam + '.verticalPan', new_value)
+        cmds.setAttr('%s.verticalPan' % shotcam, new_value)
         return
 
     def move_down(self):
@@ -414,13 +414,13 @@ class PanZoomHelper(QMainWindow):
         move_step_value = self.move_step_spinbox.value()
         shotcam = self.camera_name_text_field.text()
 
-        current_value = cmds.getAttr(shotcam + '.verticalPan')
+        current_value = cmds.getAttr('%s.verticalPan' % shotcam)
         if mod == 1:
             new_value = current_value - (move_step_value / 2)
-            cmds.setAttr(shotcam + '.verticalPan', new_value)
+            cmds.setAttr('%s.verticalPan' % shotcam, new_value)
             return
         new_value = current_value - move_step_value
-        cmds.setAttr(shotcam + '.verticalPan', new_value)
+        cmds.setAttr('%s.verticalPan' % shotcam, new_value)
         return
 
     def move_left(self):
@@ -428,13 +428,13 @@ class PanZoomHelper(QMainWindow):
         move_step_value = self.move_step_spinbox.value()
         shotcam = self.camera_name_text_field.text()
 
-        current_value = cmds.getAttr(shotcam + '.horizontalPan')
+        current_value = cmds.getAttr('%s.horizontalPan' % shotcam)
         if mod == 1:
             new_value = current_value - (move_step_value / 2)
-            cmds.setAttr(shotcam + '.horizontalPan', new_value)
+            cmds.setAttr('%s.horizontalPan' % shotcam, new_value)
             return
         new_value = current_value - move_step_value
-        cmds.setAttr(shotcam + '.horizontalPan', new_value)
+        cmds.setAttr('%s.horizontalPan' % shotcam, new_value)
         return
 
     def move_right(self):
@@ -442,19 +442,19 @@ class PanZoomHelper(QMainWindow):
         move_step_value = self.move_step_spinbox.value()
         shotcam = self.camera_name_text_field.text()
 
-        current_value = cmds.getAttr(shotcam + '.horizontalPan')
+        current_value = cmds.getAttr('%s.horizontalPan' % shotcam)
         if mod == 1:
             new_value = current_value + (move_step_value / 2)
-            cmds.setAttr(shotcam + '.horizontalPan', new_value)
+            cmds.setAttr('%s.horizontalPan' % shotcam, new_value)
             return
         new_value = current_value + move_step_value
-        cmds.setAttr(shotcam + '.horizontalPan', new_value)
+        cmds.setAttr('%s.horizontalPan' % shotcam, new_value)
         return
 
     def reset_move(self):
         shotcam = self.camera_name_text_field.text()
-        cmds.setAttr(shotcam + '.verticalPan', 0)
-        cmds.setAttr(shotcam + '.horizontalPan', 0)
+        cmds.setAttr('%s.verticalPan' % shotcam, 0)
+        cmds.setAttr('%s.horizontalPan' % shotcam, 0)
 
     def reset_all(self):
         self.reset_zoom()
@@ -474,5 +474,8 @@ if __name__ == '__main__':
 
 
 def show():
+    global window
+    if window is not None:
+        window.close()
     window = PanZoomHelper(shotcam=SHOTCAM)
     window.show()
