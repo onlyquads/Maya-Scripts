@@ -52,6 +52,7 @@ os.environ['QT_MAC_WANTS_LAYER'] = '1'
 
 window = None
 
+
 def maya_main_window():
     """Return Maya's main window"""
     for obj in QtWidgets.QApplication.topLevelWidgets():
@@ -74,7 +75,7 @@ class PanZoomHelper(QMainWindow):
         if not parent:
             parent = maya_main_window()
 
-        super(PanZoomHelper, self).__init__(parent)
+        super(PanZoomHelper, self).__init__(parent=parent)
         self.setWindowTitle(TOOLNAME)
 
         self.setWindowFlags(QtCore.Qt.Tool)
