@@ -75,7 +75,7 @@ class PanZoomHelper(QMainWindow):
         if not parent:
             parent = maya_main_window()
 
-        super(PanZoomHelper, self).__init__(parent=parent)
+        super(PanZoomHelper, self).__init__(parent)
         self.setWindowTitle(TOOLNAME)
 
         self.setWindowFlags(QtCore.Qt.Tool)
@@ -478,5 +478,5 @@ def show():
     global window
     if window is not None:
         window.close()
-    window = PanZoomHelper(shotcam=SHOTCAM)
+    window = PanZoomHelper(parent=maya_main_window(), shotcam=SHOTCAM)
     window.show()
