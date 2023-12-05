@@ -25,7 +25,7 @@ window.show();
 You can also specify the camera you want to set by default like this :
 window = pan_zoom_helper.PanZoomHelper(shotcam='your_shotcam_shape_name');
 
-Make sure to replace the 'your_shotcam_shape_name' with you're camera
+Make sure to replace the 'your_shotcam_shape_name' with youre camera
 shape name
 
 '''
