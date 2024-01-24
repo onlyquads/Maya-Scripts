@@ -1,7 +1,6 @@
 '''
 Collection of functions to work with skinclusters
 
-Author: NicoG
 '''
 
 import maya.cmds as mc

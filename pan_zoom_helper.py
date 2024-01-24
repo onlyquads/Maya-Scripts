@@ -8,8 +8,6 @@ so the tool will automatically set it if found in the scene.
 
 Tested maya 2020, 2022
 
-Author: NicoG
-
 # ON THE GO:
 Copy/Paste this whole page of code in maya python console and run
 
@@ -23,7 +21,9 @@ window.show();
 
 # PIPELINE INTEGRATION
 You can also specify the camera you want to set by default like this :
+import pan_zoom_helper;
 window = pan_zoom_helper.PanZoomHelper(shotcam='your_shotcam_shape_name');
+window.show();
 
 Make sure to replace the 'your_shotcam_shape_name' with youre camera
 shape name
@@ -77,7 +77,6 @@ class PanZoomHelper(QMainWindow):
 
         super(PanZoomHelper, self).__init__(parent)
         self.setWindowTitle(TOOLNAME)
-
         self.setWindowFlags(QtCore.Qt.Tool)
 
         self.shotcam = shotcam
@@ -322,7 +321,7 @@ class PanZoomHelper(QMainWindow):
             self.activate(shotcam)
             return
 
-        # Try to set shotcam from script SHOTCAM var
+        # Try to set shotcam from script's SHOTCAM var
         shotcam = SHOTCAM
         if cmds.objExists(shotcam):
             self.activate(shotcam)
@@ -372,7 +371,7 @@ class PanZoomHelper(QMainWindow):
         cmds.setAttr('%s.zoom' % shotcam, new_value)
         return
 
-    def zoom_out(self, *args):
+    def zoom_out(self):
         zoom_step_value = self.zoom_step_spinbox.value()
         shotcam = self.camera_name_text_field.text()
         current_value = cmds.getAttr('%s.zoom' % shotcam)
