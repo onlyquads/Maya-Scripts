@@ -45,7 +45,9 @@ MOVE_STEP_VALUE = 0.1
 # Change default zoom step value below
 ZOOM_STEP_VALUE = 0.1
 
-TOOLNAME = 'PAN ZOOM HELPER 1.3'
+TOOLNAME = 'PAN ZOOM HELPER'
+VERSION = '1.4'
+
 
 # FOR MAC OS WE NEED THIS LINE FOR PYTHON 2.7
 os.environ['QT_MAC_WANTS_LAYER'] = '1'
@@ -76,7 +78,7 @@ class PanZoomHelper(QMainWindow):
             parent = maya_main_window()
 
         super(PanZoomHelper, self).__init__(parent)
-        self.setWindowTitle(TOOLNAME)
+        self.setWindowTitle('%s %s' % (TOOLNAME, VERSION))
         self.setWindowFlags(QtCore.Qt.Tool)
 
         self.shotcam = shotcam
@@ -144,10 +146,10 @@ class PanZoomHelper(QMainWindow):
         self.layout_zoom_in_out_buttons = QHBoxLayout()
 
         self.zoom_in_button = QPushButton('Zoom In')
-        self.zoom_in_button.clicked.connect(self.zoom_in)
+        self.zoom_in_button.clicked.connect(self.zoom)
 
         self.zoom_out_button = QPushButton('Zoom Out')
-        self.zoom_out_button.clicked.connect(self.zoom_out)
+        self.zoom_out_button.clicked.connect(self.zoom)
 
         self.layout_zoom_in_out_buttons.addWidget(self.zoom_in_button)
         self.layout_zoom_in_out_buttons.addWidget(self.zoom_out_button)
@@ -168,13 +170,13 @@ class PanZoomHelper(QMainWindow):
         # Create the move buttons
         self.layout_left_right_buttons = QHBoxLayout()
         self.move_up_button = QPushButton('Up')
-        self.move_up_button.clicked.connect(self.move_up)
+        self.move_up_button.clicked.connect(self.move)
         self.move_left_button = QPushButton('Left')
-        self.move_left_button.clicked.connect(self.move_left)
+        self.move_left_button.clicked.connect(self.move)
         self.move_right_button = QPushButton('Right')
-        self.move_right_button.clicked.connect(self.move_right)
+        self.move_right_button.clicked.connect(self.move)
         self.move_down_button = QPushButton('Down')
-        self.move_down_button.clicked.connect(self.move_down)
+        self.move_down_button.clicked.connect(self.move)
         self.reset_move_button = QPushButton('Reset Move')
         self.reset_move_button.clicked.connect(self.reset_move)
 
@@ -224,10 +226,9 @@ class PanZoomHelper(QMainWindow):
         main_layout.addWidget(hint_text_separator)
 
         # Add user hint text
-        user_hint_text = QLabel(
-            '''<span style= font-size:9pt; text-align:center>
-            <p>Use SHIFT + Click on  move/zoom buttons
-            <p>to divide step value by 2</p>''')
+        user_hint_text = QLabel('Use SHIFT + Click on move/zoom buttons '
+                                'to divide step value by 2')
+        user_hint_text.setWordWrap(True)
         main_layout.addWidget(user_hint_text)
 
         self.setCentralWidget(central_widget)
@@ -351,105 +352,65 @@ class PanZoomHelper(QMainWindow):
         if default_zoom_step_value:
             self.zoom_step_spinbox.setValue(default_zoom_step_value)
 
-    def zoom_in(self):
+    def zoom(self):
+
+        sender_button = self.sender()
+        zoom_type = sender_button.text()
+
         zoom_step_value = self.zoom_step_spinbox.value()
         shotcam = self.camera_name_text_field.text()
         current_value = cmds.getAttr('%s.zoom' % shotcam)
 
         # If mod key pressed
         mod = cmds.getModifiers()
-        if mod == 1:
-            new_value = current_value - (zoom_step_value / 2)
-            if new_value <= 0:
-                return cmds.warning("The value you try to set is below zero")
-            cmds.setAttr('%s.zoom' % shotcam, new_value)
-            return
+        modifier_factor = 0.5 if mod == 1 else 1.0
 
-        new_value = current_value - zoom_step_value
+        if zoom_type == "Zoom In":
+            new_value = current_value - (zoom_step_value * modifier_factor)
+        elif zoom_type == "Zoom Out":
+            new_value = current_value + (zoom_step_value * modifier_factor)
+        else:
+            return cmds.warning("Invalid zoom type")
+
         if new_value <= 0:
             return cmds.warning("The value you try to set is below zero")
+
         cmds.setAttr('%s.zoom' % shotcam, new_value)
-        return
-
-    def zoom_out(self):
-        zoom_step_value = self.zoom_step_spinbox.value()
-        shotcam = self.camera_name_text_field.text()
-        current_value = cmds.getAttr('%s.zoom' % shotcam)
-
-        # If mod key pressed
-        mod = cmds.getModifiers()
-        if mod == 1:
-            new_value = current_value + (zoom_step_value / 2)
-            if new_value <= 0:
-                return cmds.warning("The value you try to set is below zero")
-            cmds.setAttr('%s.zoom' % shotcam, new_value)
-            return
-
-        new_value = current_value + zoom_step_value
-        if new_value <= 0:
-            return cmds.warning("The value you try to set is below zero")
-        cmds.setAttr('%s.zoom' % shotcam, new_value)
-        return
 
     def reset_zoom(self):
         shotcam = self.camera_name_text_field.text()
         cmds.setAttr('%s.zoom' % shotcam, 1)
 
-    def move_up(self):
+    def move(self):
+        sender_button = self.sender()
+        direction = sender_button.text()
         mod = cmds.getModifiers()
         move_step_value = self.move_step_spinbox.value()
         shotcam = self.camera_name_text_field.text()
 
-        current_value = cmds.getAttr('%s.verticalPan' % shotcam)
-        if mod == 1:
-            new_value = current_value + (move_step_value / 2)
-            cmds.setAttr('%s.verticalPan' % shotcam, new_value)
-            return
-        new_value = current_value + move_step_value
-        cmds.setAttr('%s.verticalPan' % shotcam, new_value)
-        return
+        if direction == "Up":
+            axis = "verticalPan"
+        elif direction == "Down":
+            axis = "verticalPan"
+        elif direction == "Left":
+            axis = "horizontalPan"
+        elif direction == "Right":
+            axis = "horizontalPan"
+        else:
+            return cmds.warning("Invalid direction")
 
-    def move_down(self):
-        mod = cmds.getModifiers()
-        move_step_value = self.move_step_spinbox.value()
-        shotcam = self.camera_name_text_field.text()
+        current_value = cmds.getAttr('%s.%s' % (shotcam, axis))
 
-        current_value = cmds.getAttr('%s.verticalPan' % shotcam)
-        if mod == 1:
-            new_value = current_value - (move_step_value / 2)
-            cmds.setAttr('%s.verticalPan' % shotcam, new_value)
-            return
-        new_value = current_value - move_step_value
-        cmds.setAttr('%s.verticalPan' % shotcam, new_value)
-        return
+        modifier_factor = 0.5 if mod == 1 else 1.0
 
-    def move_left(self):
-        mod = cmds.getModifiers()
-        move_step_value = self.move_step_spinbox.value()
-        shotcam = self.camera_name_text_field.text()
+        if direction in ["Up", "Right"]:
+            new_value = current_value + (move_step_value * modifier_factor)
+        elif direction in ["Down", "Left"]:
+            new_value = current_value - (move_step_value * modifier_factor)
+        else:
+            return cmds.warning("Invalid direction")
 
-        current_value = cmds.getAttr('%s.horizontalPan' % shotcam)
-        if mod == 1:
-            new_value = current_value - (move_step_value / 2)
-            cmds.setAttr('%s.horizontalPan' % shotcam, new_value)
-            return
-        new_value = current_value - move_step_value
-        cmds.setAttr('%s.horizontalPan' % shotcam, new_value)
-        return
-
-    def move_right(self):
-        mod = cmds.getModifiers()
-        move_step_value = self.move_step_spinbox.value()
-        shotcam = self.camera_name_text_field.text()
-
-        current_value = cmds.getAttr('%s.horizontalPan' % shotcam)
-        if mod == 1:
-            new_value = current_value + (move_step_value / 2)
-            cmds.setAttr('%s.horizontalPan' % shotcam, new_value)
-            return
-        new_value = current_value + move_step_value
-        cmds.setAttr('%s.horizontalPan' % shotcam, new_value)
-        return
+        cmds.setAttr('%s.%s' % (shotcam, axis), new_value)
 
     def reset_move(self):
         shotcam = self.camera_name_text_field.text()
