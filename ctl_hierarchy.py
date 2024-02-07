@@ -2,7 +2,6 @@ import maya.cmds as mc
 import re
 
 
-
 # Add an optional name or leave empty
 CTL_NAME = [
     '_ctrl',
@@ -22,13 +21,11 @@ def compare_names(node_list):
     filtered_items = []
 
     root_name = '_'.join(node_list[0].split(NAME_SPLIT)[:PREFIX_ELEMENT_COUNT])
-    
     root_name = re.sub(r'\d*$', '', root_name)  # Remove any ending digit
 
     filtered_items = [item for item in node_list if item.startswith(root_name)]
 
     return filtered_items
-
 
 
 def optional_check(node):
@@ -39,7 +36,6 @@ def optional_check(node):
         if i in node_sn:
             return True
     return False
-
 
 
 def is_anim_controller(node):
@@ -64,7 +60,6 @@ def get_controller_hierarchy(node):
     if is_anim_controller(node):
         controller_list.append(node)
 
-
     children = mc.listRelatives(node, allDescendents=True, fullPath=False)
     if not children:
         return controller_list
@@ -72,32 +67,25 @@ def get_controller_hierarchy(node):
         if is_anim_controller(child):
             controller_list.append(child)
 
-    # print(controller_list)
-
-    return controller_list
+    filtered = compare_names(controller_list)
+    return filtered
 
 
 def select_add(node):
     mc.select(add=node)
 
 
-
-def get_rig_parth_child_controller():
-    child_list = []
+def get_children_ctl():
+    children_list = []
     selection_list = mc.ls(selection=True)
 
     for i in selection_list:
         controller_list = get_controller_hierarchy(i)
+        children_list += controller_list
 
-        filtered = compare_names(controller_list)
-        print(filtered)
-        child_list += filtered
-
-    print('FILTERED')
-    print(child_list)
-
-    for i in child_list:
+    mc.warning(f'Found {len(children_list)} items')
+    for i in children_list:
         mc.select(i, add=True)
 
 
-get_rig_parth_child_controller()
+get_children_ctl()
