@@ -1,3 +1,18 @@
+'''
+# DESCRIPTION:
+This script helps selecting the controllers that are part of a chain. For
+example: select the first finger controller, run the script and it will
+select the other fingre controllers.
+Works with necks, spines, arms, fingers, tails.
+Also works with multiple controller chains.
+
+# USAGE:
+
+from children_rig_ctl import get_children_ctl_from_selection
+get_children_ctl_from_selection()
+
+'''
+
 import maya.cmds as mc
 import re
 
@@ -88,8 +103,4 @@ def get_children_ctl_from_selection():
 
     children_list = set(children_list)
     mc.warning(f'Found {len(children_list)} items')
-    for i in children_list:
-        mc.select(i, add=True)
-
-
-get_children_ctl_from_selection()
+    mc.select(children_list, add=True)
