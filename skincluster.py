@@ -36,40 +36,44 @@ def get_skin(node):
 def reset_skincluster(nodes):
     '''Usage: reset_skincluster(mc.ls(sl=True))'''
     for node in nodes:
-        skincluster = get_skin(node)
-        joint_indices = mc.getAttr(skincluster+'.matrix', mi=True)
-        for id in joint_indices:
-            connected_joints = mc.listConnections(
-                skincluster+'.matrix['+str(id)+']', s=True) or []
-            if connected_joints:
-                sk = connected_joints[0]
-                has_hack_skin = mc.listConnections(
-                    skincluster+'.bindPreMatrix['+str(id)+']', s=True) or []
-                if not has_hack_skin:
-                    val = mc.getAttr(sk + '.worldInverseMatrix')
-                    mc.setAttr(
-                        skincluster+'.bindPreMatrix['+str(id)+']',
-                        type='matrix',
-                        *val)
+        skin_dict = get_skin(node)
+        for skincluster, joints in skin_dict.items():
+            joint_indices = mc.getAttr(skincluster+'.matrix', mi=True)
+            for id in joint_indices:
+                connected_joints = mc.listConnections(
+                    skincluster+'.matrix['+str(id)+']', s=True) or []
+                if connected_joints:
+                    sk = connected_joints[0]
+                    has_hack_skin = mc.listConnections(
+                        skincluster+'.bindPreMatrix['+str(id)+']', s=True) or []
+                    if not has_hack_skin:
+                        val = mc.getAttr(sk + '.worldInverseMatrix')
+                        mc.setAttr(
+                            skincluster+'.bindPreMatrix['+str(id)+']',
+                            type='matrix',
+                            *val)
+
 
 
 def delete_skincluster_nodes(nodes):
     skin_cluster_nodes = get_skin(nodes)
     for skincluster in skin_cluster_nodes:
         mc.delete(skincluster)
-        print(f'Node : {skincluster} deleted')
+        print('Node : ' + skincluster + ' deleted')
 
 
 def reset_skincluster_no_hack(nodes):
     for node in nodes:
-        skin = get_skin(node)
-        ids_list = mc.getAttr(skin + '.matrix', mi=True)
-        for id in ids_list:
-            skin_connections = mc.listConnections(
-                skin + '.matrix[' + str(id) + ']', s=True)[0]
-            value = mc.getAttr(skin_connections + '.worldInverseMatrix')
-            mc.setAttr(
-                skin + '.bindPreMatrix[' + str(id) + ']', type='matrix', *value)
+        skin_dict = get_skin(node)
+        for skin, joints in skin_dict.items():
+            ids_list = mc.getAttr(skin + '.matrix', mi=True)
+            for id in ids_list:
+                skin_connections = mc.listConnections(
+                    skin + '.matrix[' + str(id) + ']', s=True)[0]
+                value = mc.getAttr(skin_connections + '.worldInverseMatrix')
+                mc.setAttr(
+                    skin + '.bindPreMatrix[' + str(id) + ']', type='matrix', *value)
+
 
 
 
