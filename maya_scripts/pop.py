@@ -10,11 +10,9 @@ def open_dir(path):
     print("Trying to open directory path: " + fixed_path)
     if os.path.isdir(fixed_path):
         if platform.system() == "Windows":
-
             cmd = ["explorer", fixed_path]
 
         elif platform.system() == "Darwin":
-
             cmd = ["open", "%s" % fixed_path]
 
         elif platform.system() == "Linux":
@@ -30,7 +28,7 @@ def open_current_file_directory():
     if not path:
         mc.warning('No directory to open')
         return
-    sp.Popen(['explorer', os.path.normpath(os.path.dirname(path))])
+    open(os.path.normpath(os.path.dirname(path)))
 
 
 def add_to_rv_session(path):
