@@ -189,6 +189,7 @@ class SkinPaintHelper(QWidget):
             return
         print('Operation set to Smooth')
 
+
 def show_ui():
     app = QtWidgets.QApplication.instance()
     if app is None:
@@ -198,5 +199,3 @@ def show_ui():
     window.show()
 
     app.exec_()
-
-
